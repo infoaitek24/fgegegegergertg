@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "909610626032",
+    "firebase_url": "https://movie-flix-mxnzli-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "movie-flix-mxnzli",
+    "storage_bucket": "movie-flix-mxnzli.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:909610626032:android:47aa681c9c0baed08b0b35",
+        "android_client_info": {
+          "package_name": "com.moviea.momuflix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApK8XqAQ4L6Es7Im3HnmM81MLDjwRZkkM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

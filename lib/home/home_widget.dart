@@ -7,7 +7,6 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart'
     as smooth_page_indicator;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import 'home_model.dart';
 export 'home_model.dart';
@@ -55,236 +54,270 @@ class _HomeWidgetState extends State<HomeWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              SizedBox(
-                width: double.infinity,
-                height: 400.0,
-                child: Stack(
-                  children: [
-                    PagedPageView<ApiPagingParams, dynamic>(
-                      pagingController: _model.setPageViewController(
-                        (nextPageMarker) => TrendingCall.call(
-                          apiKey: 'b36ffbe87e5597c826742a6782d8f62a',
+              FutureBuilder<ApiCallResponse>(
+                future: TrendingCall.call(),
+                builder: (context, snapshot) {
+                  // Customize what your widget looks like when it's loading.
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: SizedBox(
+                        width: 40.0,
+                        height: 40.0,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            FlutterFlowTheme.of(context).primary,
+                          ),
                         ),
                       ),
-                      pageController: _model.pageViewController ??=
-                          PageController(
-                              initialPage:
-                                  min(0, _model.pageViewLoadedLength - 1)),
-                      onPageChanged: (_) => setState(() {
-                        _model.pageViewLoadedLength =
-                            _model.pageViewPagingController!.itemList!.length;
-                      }),
-                      scrollDirection: Axis.horizontal,
-                      builderDelegate: PagedChildBuilderDelegate<dynamic>(
-                        // Customize what your widget looks like when it's loading the first page.
-                        firstPageProgressIndicatorBuilder: (_) => Center(
-                          child: SizedBox(
-                            width: 40.0,
-                            height: 40.0,
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                FlutterFlowTheme.of(context).primary,
-                              ),
-                            ),
-                          ),
-                        ),
-                        // Customize what your widget looks like when it's loading another page.
-                        newPageProgressIndicatorBuilder: (_) => Center(
-                          child: SizedBox(
-                            width: 40.0,
-                            height: 40.0,
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                FlutterFlowTheme.of(context).primary,
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        itemBuilder: (context, _, resultsIndex) {
-                          final resultsItem = _model.pageViewPagingController!
-                              .itemList![resultsIndex];
-                          return Stack(
-                            children: [
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  context.pushNamed(
-                                    'MovieDetails',
-                                    queryParameters: {
-                                      'movieId': serializeParam(
-                                        getJsonField(
-                                          resultsItem,
-                                          r'''$.id''',
+                    );
+                  }
+                  final pageViewTrendingResponse = snapshot.data!;
+                  return Builder(
+                    builder: (context) {
+                      final results = getJsonField(
+                        pageViewTrendingResponse.jsonBody,
+                        r'''$.results''',
+                      ).toList().take(4).toList();
+                      return SizedBox(
+                        width: double.infinity,
+                        height: 400.0,
+                        child: Stack(
+                          children: [
+                            PageView.builder(
+                              controller: _model.pageViewController ??=
+                                  PageController(
+                                      initialPage: min(0, results.length - 1)),
+                              scrollDirection: Axis.horizontal,
+                              itemCount: results.length,
+                              itemBuilder: (context, resultsIndex) {
+                                final resultsItem = results[resultsIndex];
+                                return InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    context.pushNamed(
+                                      'MovieDetails',
+                                      queryParameters: {
+                                        'movieId': serializeParam(
+                                          getJsonField(
+                                            resultsItem,
+                                            r'''$.id''',
+                                          ),
+                                          ParamType.int,
                                         ),
-                                        ParamType.int,
+                                      }.withoutNulls,
+                                    );
+                                  },
+                                  child: Stack(
+                                    children: [
+                                      InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          context.pushNamed(
+                                            'MovieDetails',
+                                            queryParameters: {
+                                              'movieId': serializeParam(
+                                                getJsonField(
+                                                  resultsItem,
+                                                  r'''$.id''',
+                                                ),
+                                                ParamType.int,
+                                              ),
+                                            }.withoutNulls,
+                                          );
+                                        },
+                                        child: SizedBox(
+                                          width: double.infinity,
+                                          height: 400.0,
+                                          child: custom_widgets.ImdbImage(
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            imagePath: getJsonField(
+                                              resultsItem,
+                                              r'''$.backdropPath''',
+                                            ).toString(),
+                                            radious: 0.0,
+                                            isPoster: false,
+                                          ),
+                                        ),
                                       ),
-                                    }.withoutNulls,
-                                  );
-                                },
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  height: 400.0,
-                                  child: custom_widgets.ImdbImage(
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    imagePath: getJsonField(
-                                      resultsItem,
-                                      r'''$.backdrop_path''',
-                                    ).toString(),
-                                    radious: valueOrDefault<double>(
-                                      resultsItem,
-                                      0.0,
-                                    ),
-                                    isPoster: false,
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                alignment: const AlignmentDirectional(0.0, 1.0),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 101.0,
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Colors.transparent,
-                                        FlutterFlowTheme.of(context)
-                                            .primaryBackground
-                                      ],
-                                      stops: const [0.0, 1.0],
-                                      begin: const AlignmentDirectional(0.0, -1.0),
-                                      end: const AlignmentDirectional(0, 1.0),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                alignment: const AlignmentDirectional(0.0, 0.85),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 68.0,
-                                  decoration: const BoxDecoration(),
-                                  child: Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
-                                        24.0, 0.0, 24.0, 0.0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Expanded(
+                                      Align(
+                                        alignment:
+                                            const AlignmentDirectional(0.0, 1.0),
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: 200.0,
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Colors.transparent,
+                                                FlutterFlowTheme.of(context)
+                                                    .primaryBackground
+                                              ],
+                                              stops: const [0.0, 1.0],
+                                              begin: const AlignmentDirectional(
+                                                  0.0, -1.0),
+                                              end: const AlignmentDirectional(0, 1.0),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment:
+                                            const AlignmentDirectional(0.0, 0.85),
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: 68.0,
+                                          decoration: const BoxDecoration(),
                                           child: Padding(
                                             padding:
                                                 const EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 8.0, 0.0),
-                                            child: Column(
+                                                    24.0, 0.0, 24.0, 0.0),
+                                            child: Row(
                                               mainAxisSize: MainAxisSize.max,
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                                  CrossAxisAlignment.center,
                                               children: [
-                                                Text(
-                                                  getJsonField(
-                                                    resultsItem,
-                                                    r'''$.title''',
-                                                  ).toString(),
-                                                  maxLines: 1,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .headlineMedium
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        fontSize: 20.0,
-                                                      ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          0.0, 8.0, 0.0, 0.0),
-                                                  child: Text(
-                                                    'Action • Drama • Adventure',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily: 'Poppins',
-                                                          fontSize: 12.0,
-                                                          fontWeight:
-                                                              FontWeight.w500,
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 0.0,
+                                                                8.0, 0.0),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          getJsonField(
+                                                            resultsItem,
+                                                            r'''$.title''',
+                                                          ).toString(),
+                                                          maxLines: 1,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .headlineMedium
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                fontSize: 20.0,
+                                                              ),
                                                         ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      8.0,
+                                                                      0.0,
+                                                                      0.0),
+                                                          child: Text(
+                                                            'Action • Drama • Adventure',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  fontSize:
+                                                                      12.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Align(
+                                                  alignment:
+                                                      const AlignmentDirectional(
+                                                          0.0, 0.7),
+                                                  child: Container(
+                                                    width: 40.0,
+                                                    height: 40.0,
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primary,
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                    child: const Align(
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                              0.0, 0.0),
+                                                      child: FaIcon(
+                                                        FontAwesomeIcons.play,
+                                                        color: Colors.white,
+                                                        size: 20.0,
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               ],
                                             ),
                                           ),
                                         ),
-                                        Align(
-                                          alignment:
-                                              const AlignmentDirectional(0.0, 0.7),
-                                          child: Container(
-                                            width: 40.0,
-                                            height: 40.0,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primary,
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: const Align(
-                                              alignment: AlignmentDirectional(
-                                                  0.0, 0.0),
-                                              child: FaIcon(
-                                                FontAwesomeIcons.play,
-                                                color: Colors.white,
-                                                size: 20.0,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
+                                );
+                              },
+                            ),
+                            Align(
+                              alignment: const AlignmentDirectional(-0.83, 0.95),
+                              child: smooth_page_indicator.SmoothPageIndicator(
+                                controller: _model.pageViewController ??=
+                                    PageController(
+                                        initialPage:
+                                            min(0, results.length - 1)),
+                                count: results.length,
+                                axisDirection: Axis.horizontal,
+                                onDotClicked: (i) async {
+                                  await _model.pageViewController!
+                                      .animateToPage(
+                                    i,
+                                    duration: const Duration(milliseconds: 500),
+                                    curve: Curves.ease,
+                                  );
+                                },
+                                effect:
+                                    smooth_page_indicator.ExpandingDotsEffect(
+                                  expansionFactor: 2.0,
+                                  spacing: 8.0,
+                                  radius: 16.0,
+                                  dotWidth: 12.0,
+                                  dotHeight: 6.0,
+                                  dotColor: const Color(0x33EF233C),
+                                  activeDotColor:
+                                      FlutterFlowTheme.of(context).primary,
+                                  paintStyle: PaintingStyle.fill,
                                 ),
                               ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                    Align(
-                      alignment: const AlignmentDirectional(-0.83, 0.95),
-                      child: smooth_page_indicator.SmoothPageIndicator(
-                        controller: _model.pageViewController!,
-                        count: _model.pageViewLoadedLength,
-                        axisDirection: Axis.horizontal,
-                        onDotClicked: (i) async {
-                          await _model.pageViewController!.animateToPage(
-                            i,
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.ease,
-                          );
-                        },
-                        effect: smooth_page_indicator.ExpandingDotsEffect(
-                          expansionFactor: 2.0,
-                          spacing: 8.0,
-                          radius: 16.0,
-                          dotWidth: 12.0,
-                          dotHeight: 6.0,
-                          dotColor: const Color(0x33EF233C),
-                          activeDotColor: FlutterFlowTheme.of(context).primary,
-                          paintStyle: PaintingStyle.fill,
+                            ),
+                          ],
                         ),
-                      ),
-                    ),
-                  ],
-                ),
+                      );
+                    },
+                  );
+                },
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(24.0, 24.0, 24.0, 16.0),
@@ -310,13 +343,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                   color: Colors.transparent,
                 ),
                 child: FutureBuilder<ApiCallResponse>(
-                  future: NowPlayingMoviesCall.call(
-                    page: valueOrDefault<int>(
-                      _model.pageViewCurrentIndex,
-                      1,
-                    ),
-                    apiKey: 'b36ffbe87e5597c826742a6782d8f62a',
-                  ),
+                  future: NowPlayingMoviesCall.call(),
                   builder: (context, snapshot) {
                     // Customize what your widget looks like when it's loading.
                     if (!snapshot.hasData) {
@@ -338,10 +365,11 @@ class _HomeWidgetState extends State<HomeWidget> {
                         final movies = getJsonField(
                           listViewNowPlayingMoviesResponse.jsonBody,
                           r'''$.results''',
-                        ).toList().take(15).toList();
+                        ).toList().take(8).toList();
                         return ListView.builder(
                           padding: EdgeInsets.zero,
                           primary: false,
+                          shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
                           itemCount: movies.length,
                           itemBuilder: (context, moviesIndex) {
@@ -370,7 +398,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                 },
                                 child: MovieCardWidget(
                                   key: Key(
-                                      'Keybr4_${moviesIndex}_of_${movies.length}'),
+                                      'Key7db_${moviesIndex}_of_${movies.length}'),
                                   imagePath: getJsonField(
                                     moviesItem,
                                     r'''$.poster_path''',
@@ -418,13 +446,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                   color: Colors.transparent,
                 ),
                 child: FutureBuilder<ApiCallResponse>(
-                  future: TvShowsOnAirCall.call(
-                    page: valueOrDefault<int>(
-                      _model.pageViewCurrentIndex,
-                      1,
-                    ),
-                    apiKey: 'b36ffbe87e5597c826742a6782d8f62a',
-                  ),
+                  future: TvShowsOnAirCall.call(),
                   builder: (context, snapshot) {
                     // Customize what your widget looks like when it's loading.
                     if (!snapshot.hasData) {
@@ -446,10 +468,10 @@ class _HomeWidgetState extends State<HomeWidget> {
                         final tvshows = getJsonField(
                           listViewTvShowsOnAirResponse.jsonBody,
                           r'''$.results''',
-                        ).toList().take(15).toList();
+                        ).toList().take(8).toList();
                         return ListView.builder(
                           padding: EdgeInsets.zero,
-                          primary: false,
+                          shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
                           itemCount: tvshows.length,
                           itemBuilder: (context, tvshowsIndex) {
@@ -504,7 +526,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                     },
                                     child: MovieCardWidget(
                                       key: Key(
-                                          'Keyqnh_${tvshowsIndex}_of_${tvshows.length}'),
+                                          'Key4g4_${tvshowsIndex}_of_${tvshows.length}'),
                                       imagePath: getJsonField(
                                         tvshowsItem,
                                         r'''$.poster_path''',
@@ -560,13 +582,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                   color: Colors.transparent,
                 ),
                 child: FutureBuilder<ApiCallResponse>(
-                  future: PopularMoviesCall.call(
-                    page: valueOrDefault<int>(
-                      _model.pageViewCurrentIndex,
-                      1,
-                    ),
-                    apiKey: 'b36ffbe87e5597c826742a6782d8f62a',
-                  ),
+                  future: PopularMoviesCall.call(),
                   builder: (context, snapshot) {
                     // Customize what your widget looks like when it's loading.
                     if (!snapshot.hasData) {
@@ -588,10 +604,11 @@ class _HomeWidgetState extends State<HomeWidget> {
                         final popularMovies = getJsonField(
                           listViewPopularMoviesResponse.jsonBody,
                           r'''$.results''',
-                        ).toList().take(15).toList();
+                        ).toList().take(8).toList();
                         return ListView.builder(
                           padding: EdgeInsets.zero,
                           primary: false,
+                          shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
                           itemCount: popularMovies.length,
                           itemBuilder: (context, popularMoviesIndex) {
@@ -624,7 +641,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                 },
                                 child: MovieCardWidget(
                                   key: Key(
-                                      'Keytvn_${popularMoviesIndex}_of_${popularMovies.length}'),
+                                      'Key10p_${popularMoviesIndex}_of_${popularMovies.length}'),
                                   imagePath: getJsonField(
                                     popularMoviesItem,
                                     r'''$.poster_path''',

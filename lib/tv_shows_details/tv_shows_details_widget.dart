@@ -319,10 +319,19 @@ class _TvShowsDetailsWidgetState extends State<TvShowsDetailsWidget> {
                                     color: Color(0xB3272B30),
                                     shape: BoxShape.circle,
                                   ),
-                                  child: const Icon(
-                                    Icons.arrow_back_ios_outlined,
-                                    color: Colors.white,
-                                    size: 20.0,
+                                  child: InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      context.safePop();
+                                    },
+                                    child: const Icon(
+                                      Icons.arrow_back_ios_outlined,
+                                      color: Colors.white,
+                                      size: 20.0,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -333,10 +342,19 @@ class _TvShowsDetailsWidgetState extends State<TvShowsDetailsWidget> {
                                   color: Color(0xB3272B30),
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(
-                                  Icons.bookmark,
-                                  color: Colors.white,
-                                  size: 20.0,
+                                child: InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    context.pushNamed('Search');
+                                  },
+                                  child: const Icon(
+                                    Icons.search_outlined,
+                                    color: Colors.white,
+                                    size: 20.0,
+                                  ),
                                 ),
                               ),
                             ],
@@ -526,7 +544,7 @@ class _TvShowsDetailsWidgetState extends State<TvShowsDetailsWidget> {
                             final similarTvShows = getJsonField(
                               listViewSimilarTvShowsResponse.jsonBody,
                               r'''$.results''',
-                            ).toList().take(8).toList();
+                            ).toList().take(15).toList();
                             return ListView.builder(
                               padding: EdgeInsets.zero,
                               primary: false,

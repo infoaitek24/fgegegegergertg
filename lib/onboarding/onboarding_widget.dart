@@ -51,7 +51,7 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
           children: [
             const Spacer(),
             Image.network(
-              'https://i.postimg.cc/GmbPxghG/Onboarding-1-4x.png',
+              'https://i.postimg.cc/4NcC7bg9/Untitled-design-5.png',
               width: double.infinity,
               height: MediaQuery.sizeOf(context).height * 0.65,
               fit: BoxFit.contain,

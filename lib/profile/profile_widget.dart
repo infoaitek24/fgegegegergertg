@@ -80,13 +80,18 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(100.0),
-                          child: Image.network(
-                            'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/mo-mu-flix-q1miy8/assets/11k5hcgdmzha/512.png',
-                            width: 76.0,
-                            height: 76.0,
-                            fit: BoxFit.cover,
+                        AuthUserStreamWidget(
+                          builder: (context) => ClipRRect(
+                            borderRadius: BorderRadius.circular(100.0),
+                            child: Image.network(
+                              valueOrDefault<String>(
+                                currentUserPhoto,
+                                'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/movie-flix-mxnzli/assets/2wex6ypk9f69/512.png',
+                              ),
+                              width: 76.0,
+                              height: 76.0,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                         Expanded(

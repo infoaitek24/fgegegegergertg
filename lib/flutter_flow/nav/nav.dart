@@ -162,7 +162,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         ),
         FFRoute(
           name: 'Subscribtion',
-          path: '/subscribtion',
+          path: '/subscription',
           builder: (context, params) => const SubscribtionWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),

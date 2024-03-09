@@ -400,22 +400,36 @@ class _HomeWidgetState extends State<HomeWidget> {
                                     }.withoutNulls,
                                   );
                                 },
-                                child: MovieCardWidget(
-                                  key: Key(
-                                      'Key7db_${moviesIndex}_of_${movies.length}'),
-                                  imagePath: getJsonField(
-                                    moviesItem,
-                                    r'''$.poster_path''',
-                                  ).toString(),
-                                  title: getJsonField(
-                                    moviesItem,
-                                    r'''$.title''',
-                                  ).toString(),
-                                  duration: '1h 37m',
-                                  rating: getJsonField(
-                                    moviesItem,
-                                    r'''$.vote_average''',
-                                  ).toString(),
+                                child: wrapWithModel(
+                                  model: _model.movieCardModels1.getModel(
+                                    getJsonField(
+                                      moviesItem,
+                                      r'''$.results[:].id''',
+                                    ).toString(),
+                                    moviesIndex,
+                                  ),
+                                  updateCallback: () => setState(() {}),
+                                  child: MovieCardWidget(
+                                    key: Key(
+                                      'Key7db_${getJsonField(
+                                        moviesItem,
+                                        r'''$.results[:].id''',
+                                      ).toString()}',
+                                    ),
+                                    imagePath: getJsonField(
+                                      moviesItem,
+                                      r'''$.poster_path''',
+                                    ).toString(),
+                                    title: getJsonField(
+                                      moviesItem,
+                                      r'''$.title''',
+                                    ).toString(),
+                                    duration: '1h 37m',
+                                    rating: getJsonField(
+                                      moviesItem,
+                                      r'''$.vote_average''',
+                                    ).toString(),
+                                  ),
                                 ),
                               ),
                             );
@@ -528,28 +542,43 @@ class _HomeWidgetState extends State<HomeWidget> {
                                         }.withoutNulls,
                                       );
                                     },
-                                    child: MovieCardWidget(
-                                      key: Key(
-                                          'Key4g4_${tvshowsIndex}_of_${tvshows.length}'),
-                                      imagePath: getJsonField(
-                                        tvshowsItem,
-                                        r'''$.poster_path''',
-                                      ).toString(),
-                                      title: getJsonField(
-                                        tvshowsItem,
-                                        r'''$.name''',
-                                      ).toString(),
-                                      duration: 'S${getJsonField(
-                                        movieCardTvShowsInfoResponse.jsonBody,
-                                        r'''$.last_episode_to_air.season_number''',
-                                      ).toString()}E${getJsonField(
-                                        movieCardTvShowsInfoResponse.jsonBody,
-                                        r'''$.last_episode_to_air.episode_number''',
-                                      ).toString()}',
-                                      rating: getJsonField(
-                                        tvshowsItem,
-                                        r'''$.vote_average''',
-                                      ).toString(),
+                                    child: wrapWithModel(
+                                      model: _model.movieCardModels2.getModel(
+                                        getJsonField(
+                                          movieCardTvShowsInfoResponse.jsonBody,
+                                          r'''$.results[:].id''',
+                                        ).toString(),
+                                        tvshowsIndex,
+                                      ),
+                                      updateCallback: () => setState(() {}),
+                                      child: MovieCardWidget(
+                                        key: Key(
+                                          'Key4g4_${getJsonField(
+                                            movieCardTvShowsInfoResponse
+                                                .jsonBody,
+                                            r'''$.results[:].id''',
+                                          ).toString()}',
+                                        ),
+                                        imagePath: getJsonField(
+                                          tvshowsItem,
+                                          r'''$.poster_path''',
+                                        ).toString(),
+                                        title: getJsonField(
+                                          tvshowsItem,
+                                          r'''$.name''',
+                                        ).toString(),
+                                        duration: 'S${getJsonField(
+                                          movieCardTvShowsInfoResponse.jsonBody,
+                                          r'''$.last_episode_to_air.season_number''',
+                                        ).toString()}E${getJsonField(
+                                          movieCardTvShowsInfoResponse.jsonBody,
+                                          r'''$.last_episode_to_air.episode_number''',
+                                        ).toString()}',
+                                        rating: getJsonField(
+                                          tvshowsItem,
+                                          r'''$.vote_average''',
+                                        ).toString(),
+                                      ),
                                     ),
                                   );
                                 },
@@ -642,22 +671,36 @@ class _HomeWidgetState extends State<HomeWidget> {
                                     }.withoutNulls,
                                   );
                                 },
-                                child: MovieCardWidget(
-                                  key: Key(
-                                      'Key10p_${popularMoviesIndex}_of_${popularMovies.length}'),
-                                  imagePath: getJsonField(
-                                    popularMoviesItem,
-                                    r'''$.poster_path''',
-                                  ).toString(),
-                                  title: getJsonField(
-                                    popularMoviesItem,
-                                    r'''$.title''',
-                                  ).toString(),
-                                  duration: '1h 37m',
-                                  rating: getJsonField(
-                                    popularMoviesItem,
-                                    r'''$.vote_average''',
-                                  ).toString(),
+                                child: wrapWithModel(
+                                  model: _model.movieCardModels3.getModel(
+                                    getJsonField(
+                                      popularMoviesItem,
+                                      r'''$.results[:].id''',
+                                    ).toString(),
+                                    popularMoviesIndex,
+                                  ),
+                                  updateCallback: () => setState(() {}),
+                                  child: MovieCardWidget(
+                                    key: Key(
+                                      'Key10p_${getJsonField(
+                                        popularMoviesItem,
+                                        r'''$.results[:].id''',
+                                      ).toString()}',
+                                    ),
+                                    imagePath: getJsonField(
+                                      popularMoviesItem,
+                                      r'''$.poster_path''',
+                                    ).toString(),
+                                    title: getJsonField(
+                                      popularMoviesItem,
+                                      r'''$.title''',
+                                    ).toString(),
+                                    duration: '1h 37m',
+                                    rating: getJsonField(
+                                      popularMoviesItem,
+                                      r'''$.vote_average''',
+                                    ).toString(),
+                                  ),
                                 ),
                               ),
                             );

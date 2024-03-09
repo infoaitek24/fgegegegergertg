@@ -3,6 +3,7 @@ import '/components/cast_card_widget.dart';
 import '/components/movie_card_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -190,39 +191,6 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  valueOrDefault<String>(
-                                                    getJsonField(
-                                                      columnMovieDetailsResponse
-                                                          .jsonBody,
-                                                      r'''$.genres[0:2]..name''',
-                                                    )?.toString(),
-                                                    'Thriller',
-                                                  ),
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        fontSize: 12.0,
-                                                      ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          8.0, 0.0, 8.0, 0.0),
-                                                  child: Container(
-                                                    width: 4.0,
-                                                    height: 4.0,
-                                                    decoration: BoxDecoration(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
-                                                      shape: BoxShape.circle,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Text(
                                                   functions.durationInHM(
                                                       valueOrDefault<int>(
                                                     getJsonField(
@@ -329,8 +297,8 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                         child: const Align(
                                           alignment:
                                               AlignmentDirectional(0.0, 0.0),
-                                          child: FaIcon(
-                                            FontAwesomeIcons.play,
+                                          child: Icon(
+                                            Icons.videocam_rounded,
                                             color: Colors.white,
                                             size: 24.0,
                                           ),
@@ -415,15 +383,89 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Story',
-                            style: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .override(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Story',
+                                style: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
+                              FutureBuilder<ApiCallResponse>(
+                                future: MovieTrailerCall.call(),
+                                builder: (context, snapshot) {
+                                  // Customize what your widget looks like when it's loading.
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 40.0,
+                                        height: 40.0,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            FlutterFlowTheme.of(context)
+                                                .primary,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  final buttonMovieTrailerResponse =
+                                      snapshot.data!;
+                                  return FFButtonWidget(
+                                    onPressed: () async {
+                                      context.pushNamed(
+                                        'PlayTrailer',
+                                        queryParameters: {
+                                          'key': serializeParam(
+                                            getJsonField(
+                                              buttonMovieTrailerResponse
+                                                  .jsonBody,
+                                              r'''$.results[:].key''',
+                                            ).toString(),
+                                            ParamType.String,
+                                          ),
+                                        }.withoutNulls,
+                                      );
+                                    },
+                                    text: 'Play Trailer',
+                                    icon: const Icon(
+                                      Icons.play_arrow_rounded,
+                                      size: 15.0,
+                                    ),
+                                    options: FFButtonOptions(
+                                      width: 164.0,
+                                      height: 35.0,
+                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                          24.0, 0.0, 24.0, 0.0),
+                                      iconPadding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              0.0, 0.0, 0.0, 0.0),
+                                      color:
+                                          FlutterFlowTheme.of(context).primary,
+                                      textStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .override(
+                                            fontFamily: 'Poppins',
+                                            color: Colors.white,
+                                          ),
+                                      elevation: 3.0,
+                                      borderSide: const BorderSide(
+                                        color: Colors.transparent,
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(

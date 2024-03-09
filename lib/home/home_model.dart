@@ -1,3 +1,4 @@
+import '/components/movie_card_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'home_widget.dart' show HomeWidget;
 import 'package:flutter/material.dart';
@@ -14,15 +15,28 @@ class HomeModel extends FlutterFlowModel<HomeWidget> {
           pageViewController!.page != null
       ? pageViewController!.page!.round()
       : 0;
+  // Models for MovieCard dynamic component.
+  late FlutterFlowDynamicModels<MovieCardModel> movieCardModels1;
+  // Models for MovieCard dynamic component.
+  late FlutterFlowDynamicModels<MovieCardModel> movieCardModels2;
+  // Models for MovieCard dynamic component.
+  late FlutterFlowDynamicModels<MovieCardModel> movieCardModels3;
 
   /// Initialization and disposal methods.
 
   @override
-  void initState(BuildContext context) {}
+  void initState(BuildContext context) {
+    movieCardModels1 = FlutterFlowDynamicModels(() => MovieCardModel());
+    movieCardModels2 = FlutterFlowDynamicModels(() => MovieCardModel());
+    movieCardModels3 = FlutterFlowDynamicModels(() => MovieCardModel());
+  }
 
   @override
   void dispose() {
     unfocusNode.dispose();
+    movieCardModels1.dispose();
+    movieCardModels2.dispose();
+    movieCardModels3.dispose();
   }
 
   /// Action blocks are added here.

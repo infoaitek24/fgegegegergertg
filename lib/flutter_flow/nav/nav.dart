@@ -86,14 +86,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => const OnboardingWidget(),
         ),
         FFRoute(
-          name: 'SignIn',
-          path: '/signIn',
-          builder: (context, params) => const SignInWidget(),
-        ),
-        FFRoute(
           name: 'SignUp',
           path: '/signUp',
           builder: (context, params) => const SignUpWidget(),
+        ),
+        FFRoute(
+          name: 'SignIn',
+          path: '/signIn',
+          builder: (context, params) => const SignInWidget(),
         ),
         FFRoute(
           name: 'Home',
@@ -102,17 +102,17 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               params.isEmpty ? const NavBarPage(initialPage: 'Home') : const HomeWidget(),
         ),
         FFRoute(
-          name: 'MovieDetails',
-          path: '/movieDetails',
-          builder: (context, params) => MovieDetailsWidget(
-            movieId: params.getParam('movieId', ParamType.int),
-          ),
-        ),
-        FFRoute(
           name: 'TvShowsDetails',
           path: '/tvShowsDetails',
           builder: (context, params) => TvShowsDetailsWidget(
             tvId: params.getParam('tvId', ParamType.int),
+          ),
+        ),
+        FFRoute(
+          name: 'MovieDetails',
+          path: '/movieDetails',
+          builder: (context, params) => MovieDetailsWidget(
+            movieId: params.getParam('movieId', ParamType.int),
           ),
         ),
         FFRoute(
@@ -171,8 +171,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => PlayMovieWidget(
             movieId: params.getParam('movieId', ParamType.int),
           ),
+        ),
+        FFRoute(
+          name: 'PlayTrailer',
+          path: '/playTrailer',
+          builder: (context, params) => PlayTrailerWidget(
+            key: params.getParam('key', ParamType.String),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
+      observers: [routeObserver],
     );
 
 extension NavParamExtensions on Map<String, String?> {

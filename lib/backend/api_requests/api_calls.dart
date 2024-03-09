@@ -163,34 +163,6 @@ class MovieDetailsCall {
   }
 }
 
-class MovieTrailerCall {
-  static Future<ApiCallResponse> call({
-    int? movieId = 718789,
-    String? apiKey = 'b36ffbe87e5597c826742a6782d8f62a',
-  }) async {
-    return ApiManager.instance.makeApiCall(
-      callName: 'MovieTrailer',
-      apiUrl: 'https://api.themoviedb.org/3/movie/$movieId/videos',
-      callType: ApiCallType.GET,
-      headers: {},
-      params: {
-        'api_key': apiKey,
-      },
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: false,
-      alwaysAllowBody: false,
-    );
-  }
-
-  static List? key(dynamic response) => getJsonField(
-        response,
-        r'''$.results''',
-        true,
-      ) as List?;
-}
-
 class MovieCastCall {
   static Future<ApiCallResponse> call({
     int? movieId = 718789,

@@ -15,4 +15,3 @@ export '/history/history_widget.dart' show HistoryWidget;
 export '/settings/settings_widget.dart' show SettingsWidget;
 export '/subscribtion/subscribtion_widget.dart' show SubscribtionWidget;
 export '/play_movie/play_movie_widget.dart' show PlayMovieWidget;
-export '/play_trailer/play_trailer_widget.dart' show PlayTrailerWidget;

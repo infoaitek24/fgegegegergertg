@@ -171,16 +171,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => PlayMovieWidget(
             movieId: params.getParam('movieId', ParamType.int),
           ),
-        ),
-        FFRoute(
-          name: 'PlayTrailer',
-          path: '/playTrailer',
-          builder: (context, params) => PlayTrailerWidget(
-            key: params.getParam('key', ParamType.String),
-          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
-      observers: [routeObserver],
     );
 
 extension NavParamExtensions on Map<String, String?> {

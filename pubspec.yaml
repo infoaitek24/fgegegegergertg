@@ -108,10 +108,6 @@ dependencies:
   webview_flutter_wkwebview: 3.10.2
   webviewx_plus: 0.4.1
   xml: 6.3.0
-  youtube_player_iframe: 
-    git:
-      url: https://github.com/FlutterFlow/youtube_player_flutter.git
-      path: packages/youtube_player_iframe
 
 
   # The following adds the Cupertino Icons font to your application.

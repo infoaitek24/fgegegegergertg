@@ -1,8 +1,8 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import 'movie_details_widget.dart' show MovieDetailsWidget;
+import 'play_movie_widget.dart' show PlayMovieWidget;
 import 'package:flutter/material.dart';
 
-class MovieDetailsModel extends FlutterFlowModel<MovieDetailsWidget> {
+class PlayMovieModel extends FlutterFlowModel<PlayMovieWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();

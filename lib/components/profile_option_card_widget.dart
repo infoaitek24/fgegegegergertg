@@ -1,7 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'profile_option_card_model.dart';
 export 'profile_option_card_model.dart';
 
@@ -48,8 +47,6 @@ class _ProfileOptionCardWidgetState extends State<ProfileOptionCardWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Container(
       width: double.infinity,
       height: 48.0,

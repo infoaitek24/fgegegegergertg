@@ -4,10 +4,8 @@ import '/components/movie_card_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 import 'movie_details_model.dart';
 export 'movie_details_model.dart';
 
@@ -45,8 +43,6 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -54,36 +50,30 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        body: FutureBuilder<ApiCallResponse>(
-          future: (_model.apiRequestCompleter ??= Completer<ApiCallResponse>()
-                ..complete(MovieDetailsCall.call(
-                  movieId: widget.movieId,
-                  apiKey: FFAppState().apiKey,
-                )))
-              .future,
-          builder: (context, snapshot) {
-            // Customize what your widget looks like when it's loading.
-            if (!snapshot.hasData) {
-              return Center(
-                child: SizedBox(
-                  width: 40.0,
-                  height: 40.0,
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      FlutterFlowTheme.of(context).primary,
+        body: SafeArea(
+          top: true,
+          child: FutureBuilder<ApiCallResponse>(
+            future: MovieDetailsCall.call(
+              movieId: widget.movieId,
+            ),
+            builder: (context, snapshot) {
+              // Customize what your widget looks like when it's loading.
+              if (!snapshot.hasData) {
+                return Center(
+                  child: SizedBox(
+                    width: 40.0,
+                    height: 40.0,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        FlutterFlowTheme.of(context).primary,
+                      ),
                     ),
                   ),
-                ),
-              );
-            }
-            final columnMovieDetailsResponse = snapshot.data!;
-            return RefreshIndicator(
-              onRefresh: () async {
-                setState(() => _model.apiRequestCompleter = null);
-                await _model.waitForApiRequestCompleted();
-              },
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
+                );
+              }
+              final columnMovieDetailsResponse = snapshot.data!;
+              return SingleChildScrollView(
+                primary: false,
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -312,21 +302,38 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                   Padding(
                                     padding: const EdgeInsetsDirectional.fromSTEB(
                                         0.0, 0.0, 24.0, 0.0),
-                                    child: Container(
-                                      width: 48.0,
-                                      height: 48.0,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .primary,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: const Align(
-                                        alignment:
-                                            AlignmentDirectional(0.0, 0.0),
-                                        child: FaIcon(
-                                          FontAwesomeIcons.play,
-                                          color: Colors.white,
-                                          size: 24.0,
+                                    child: InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () async {
+                                        context.pushNamed(
+                                          'PlayMovie',
+                                          queryParameters: {
+                                            'movieId': serializeParam(
+                                              widget.movieId,
+                                              ParamType.int,
+                                            ),
+                                          }.withoutNulls,
+                                        );
+                                      },
+                                      child: Container(
+                                        width: 48.0,
+                                        height: 48.0,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .primary,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: const Align(
+                                          alignment:
+                                              AlignmentDirectional(0.0, 0.0),
+                                          child: FaIcon(
+                                            FontAwesomeIcons.play,
+                                            color: Colors.white,
+                                            size: 24.0,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -357,10 +364,19 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                       color: Color(0xB3272B30),
                                       shape: BoxShape.circle,
                                     ),
-                                    child: const Icon(
-                                      Icons.arrow_back_ios_outlined,
-                                      color: Colors.white,
-                                      size: 20.0,
+                                    child: InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () async {
+                                        context.safePop();
+                                      },
+                                      child: const Icon(
+                                        Icons.arrow_back_ios_outlined,
+                                        color: Colors.white,
+                                        size: 20.0,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -371,10 +387,19 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                     color: Color(0xB3272B30),
                                     shape: BoxShape.circle,
                                   ),
-                                  child: const Icon(
-                                    Icons.bookmark,
-                                    color: Colors.white,
-                                    size: 20.0,
+                                  child: InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      context.pushNamed('Search');
+                                    },
+                                    child: const Icon(
+                                      Icons.search_rounded,
+                                      color: Colors.white,
+                                      size: 20.0,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -441,7 +466,6 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                       child: FutureBuilder<ApiCallResponse>(
                         future: MovieCastCall.call(
                           movieId: widget.movieId,
-                          apiKey: FFAppState().apiKey,
                         ),
                         builder: (context, snapshot) {
                           // Customize what your widget looks like when it's loading.
@@ -477,7 +501,7 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                         24.0, 0.0, 0.0, 0.0),
                                     child: CastCardWidget(
                                       key: Key(
-                                          'Keyf77_${castIndex}_of_${cast.length}'),
+                                          'Keyto7_${castIndex}_of_${cast.length}'),
                                       image:
                                           'https://www.themoviedb.org/t/p/w276_and_h350_face${getJsonField(
                                         castItem,
@@ -515,9 +539,7 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                         color: Colors.transparent,
                       ),
                       child: FutureBuilder<ApiCallResponse>(
-                        future: SimilerMoviesCall.call(
-                          apiKey: FFAppState().apiKey,
-                        ),
+                        future: SimilerMoviesCall.call(),
                         builder: (context, snapshot) {
                           // Customize what your widget looks like when it's loading.
                           if (!snapshot.hasData) {
@@ -539,7 +561,7 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                               final similarMovies = getJsonField(
                                 listViewSimilerMoviesResponse.jsonBody,
                                 r'''$.results''',
-                              ).toList().take(8).toList();
+                              ).toList();
                               return ListView.builder(
                                 padding: EdgeInsets.zero,
                                 primary: false,
@@ -572,7 +594,7 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                                       },
                                       child: MovieCardWidget(
                                         key: Key(
-                                            'Keyrif_${similarMoviesIndex}_of_${similarMovies.length}'),
+                                            'Keyzrd_${similarMoviesIndex}_of_${similarMovies.length}'),
                                         imagePath: valueOrDefault<String>(
                                           getJsonField(
                                             similarMoviesItem,
@@ -611,9 +633,9 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
                     ),
                   ],
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

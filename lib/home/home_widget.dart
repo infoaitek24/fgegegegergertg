@@ -6,8 +6,8 @@ import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart'
     as smooth_page_indicator;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 import 'home_model.dart';
 export 'home_model.dart';
 
@@ -28,6 +28,11 @@ class _HomeWidgetState extends State<HomeWidget> {
     super.initState();
     _model = createModel(context, () => HomeModel());
 
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      setDarkModeSetting(context, ThemeMode.dark);
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
@@ -40,8 +45,6 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -55,7 +58,9 @@ class _HomeWidgetState extends State<HomeWidget> {
             mainAxisSize: MainAxisSize.max,
             children: [
               FutureBuilder<ApiCallResponse>(
-                future: TrendingCall.call(),
+                future: TrendingCall.call(
+                  apiKey: 'b36ffbe87e5597c826742a6782d8f62a',
+                ),
                 builder: (context, snapshot) {
                   // Customize what your widget looks like when it's loading.
                   if (!snapshot.hasData) {
@@ -77,7 +82,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                       final results = getJsonField(
                         pageViewTrendingResponse.jsonBody,
                         r'''$.results''',
-                      ).toList().take(4).toList();
+                      ).toList().take(10).toList();
                       return SizedBox(
                         width: double.infinity,
                         height: 400.0,
@@ -139,7 +144,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                             height: double.infinity,
                                             imagePath: getJsonField(
                                               resultsItem,
-                                              r'''$.backdropPath''',
+                                              r'''$.backdrop_path''',
                                             ).toString(),
                                             radious: 0.0,
                                             isPoster: false,
@@ -369,7 +374,6 @@ class _HomeWidgetState extends State<HomeWidget> {
                         return ListView.builder(
                           padding: EdgeInsets.zero,
                           primary: false,
-                          shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
                           itemCount: movies.length,
                           itemBuilder: (context, moviesIndex) {
@@ -471,7 +475,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                         ).toList().take(8).toList();
                         return ListView.builder(
                           padding: EdgeInsets.zero,
-                          shrinkWrap: true,
+                          primary: false,
                           scrollDirection: Axis.horizontal,
                           itemCount: tvshows.length,
                           itemBuilder: (context, tvshowsIndex) {
@@ -608,7 +612,6 @@ class _HomeWidgetState extends State<HomeWidget> {
                         return ListView.builder(
                           padding: EdgeInsets.zero,
                           primary: false,
-                          shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
                           itemCount: popularMovies.length,
                           itemBuilder: (context, popularMoviesIndex) {

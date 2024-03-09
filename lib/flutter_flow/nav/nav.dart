@@ -132,18 +132,18 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : const SearchWidget(),
         ),
         FFRoute(
-          name: 'Activity',
-          path: '/activity',
-          builder: (context, params) => params.isEmpty
-              ? const NavBarPage(initialPage: 'Activity')
-              : const ActivityWidget(),
-        ),
-        FFRoute(
           name: 'Profile',
           path: '/profile',
           builder: (context, params) => params.isEmpty
               ? const NavBarPage(initialPage: 'Profile')
               : const ProfileWidget(),
+        ),
+        FFRoute(
+          name: 'Activity',
+          path: '/activity',
+          builder: (context, params) => params.isEmpty
+              ? const NavBarPage(initialPage: 'Activity')
+              : const ActivityWidget(),
         ),
         FFRoute(
           name: 'Bookmark',
@@ -164,6 +164,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'Subscribtion',
           path: '/subscription',
           builder: (context, params) => const SubscribtionWidget(),
+        ),
+        FFRoute(
+          name: 'PlayMovie',
+          path: '/playMovie',
+          builder: (context, params) => PlayMovieWidget(
+            movieId: params.getParam('movieId', ParamType.int),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

@@ -8,9 +8,10 @@ export '/tv_shows_details/tv_shows_details_widget.dart'
     show TvShowsDetailsWidget;
 export '/episodes/episodes_widget.dart' show EpisodesWidget;
 export '/search/search_widget.dart' show SearchWidget;
-export '/activity/activity_widget.dart' show ActivityWidget;
 export '/profile/profile_widget.dart' show ProfileWidget;
+export '/activity/activity_widget.dart' show ActivityWidget;
 export '/bookmark/bookmark_widget.dart' show BookmarkWidget;
 export '/history/history_widget.dart' show HistoryWidget;
 export '/settings/settings_widget.dart' show SettingsWidget;
 export '/subscribtion/subscribtion_widget.dart' show SubscribtionWidget;
+export '/play_movie/play_movie_widget.dart' show PlayMovieWidget;

@@ -1,8 +1,8 @@
 import '/backend/supabase/supabase.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_web_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'play_movie_model.dart';
 export 'play_movie_model.dart';
 
@@ -77,14 +77,16 @@ class _PlayMovieWidgetState extends State<PlayMovieWidget> {
                 width: double.infinity,
                 height: double.infinity,
                 decoration: const BoxDecoration(),
-                child: FlutterFlowWebView(
-                  content:
-                      '${containerNameServerRow?.url}${widget.movieId?.toString()}',
-                  bypass: false,
-                  width: MediaQuery.sizeOf(context).width,
-                  height: 916.0,
-                  verticalScroll: false,
-                  horizontalScroll: false,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Html(
+                      data:
+                          '<iframe src=\"https://www.2embed.cc/embed/${widget.movieId?.toString()}\" width=\"100%\" height=\"100%\" frameborder=\"0\" scrolling=\"no\" allowfullscreen sandbox=\"allow-forms allow-scripts allow-same-origin\"></iframe>',
+                      onLinkTap: (url, _, __, ___) => launchURL(url!),
+                    ),
+                  ],
                 ),
               );
             },

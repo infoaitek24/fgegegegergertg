@@ -36,7 +36,6 @@ dependencies:
   csv: 5.0.1
   easy_debounce: 2.0.1
   equatable: 2.0.5
-  file_picker: 6.1.1
   firebase_auth: 4.17.7
   firebase_auth_platform_interface: 7.1.7
   firebase_auth_web: 5.9.7
@@ -48,8 +47,8 @@ dependencies:
   firebase_performance_web: 0.1.4+24
   flutter_animate: 4.1.1+1
   flutter_cache_manager: 3.3.1
+  flutter_html: 3.0.0-alpha.5
   flutter_native_splash: 2.3.1
-  flutter_plugin_android_lifecycle: 2.0.17
   flutter_secure_storage: 8.0.0
   font_awesome_flutter: 10.6.0
   from_css_color: 2.0.0
@@ -74,7 +73,6 @@ dependencies:
   path_provider_platform_interface: 2.0.6
   percent_indicator: 4.2.2
   plugin_platform_interface: 2.1.8
-  pointer_interceptor: 0.10.1
   postgrest: 1.5.2
   provider: 6.0.5
   realtime_client: 1.4.0
@@ -100,13 +98,11 @@ dependencies:
   url_launcher_android: 6.0.27
   url_launcher_ios: 6.1.4
   url_launcher_platform_interface: 2.1.2
-  uuid: ^4.0.0
   visibility_detector: ^0.4.0+2
   webview_flutter: 4.4.4
   webview_flutter_android: 3.13.2
   webview_flutter_platform_interface: 2.9.1
   webview_flutter_wkwebview: 3.10.2
-  webviewx_plus: 0.4.1
   xml: 6.3.0
 
 
@@ -116,7 +112,6 @@ dependencies:
 
 dependency_overrides:
   http: 1.2.0
-  pointer_interceptor: 0.10.1
   rxdart: 0.27.7
   uuid: ^4.0.0
 
